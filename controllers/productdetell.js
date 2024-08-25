@@ -102,22 +102,25 @@ exports.addUserAddress = async (req, res, next) => {
 
     console.log('User ID:', req.user.id); // Verify user ID
 
-    // Add new address to the database
-    const newAddress = await prisma.address.create({
-      data: {
-        name,
-        lastname,
-        phone,
-        province,
-        district,
-        tambon,
-        housenumber,
-        village,
-        zipcode,
-        other,
-        userId: req.user.id,
-      }
-    });
+ // Convert zipcode to string if necessary
+ const zipcodeStr = zipcode.toString();
+
+ // Create new address in the database
+ const newAddress = await prisma.address.create({
+   data: {
+     name,
+     lastname,
+     phone,
+     province,
+     district,
+     tambon,
+     housenumber,
+     village,
+     zipcode: zipcodeStr, // Ensure zipcode is a string
+     other,
+     userId: req.user.id,
+   }
+ });
 
     console.log('New address created:', newAddress); // Verify the new address data
 

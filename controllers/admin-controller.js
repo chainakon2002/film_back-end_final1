@@ -110,3 +110,20 @@ exports.getadminorder = async (req, res, next) => {
     next(err)
   }
 }
+
+
+
+exports.updateOrderStatus = async (req, res, next) => {
+  try {
+      const { orderId, status } = req.body;
+
+      const updatedOrder = await db.order.update({
+          where: { id: parseInt(orderId) },
+          data: { status },
+      });
+
+      res.json({ msg: "Order status updated successfully", updatedOrder });
+  } catch (err) {
+      next(err);
+  }
+};

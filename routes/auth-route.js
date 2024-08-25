@@ -38,5 +38,7 @@ router.get('/admingetaddress',authenticate,adminController.admingetAddress)
 router.get('/getuserdetails',authenticate,adminController.getUserDetails)
 router.get('/getorderadmin',authenticate,adminController.getadminorder)
 
+router.put('/updateorderstatus', authenticate, adminController.updateOrderStatus);
+
 router.put('/products/:id', ProductController.updatestock)
 module.exports = router
