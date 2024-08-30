@@ -26,6 +26,7 @@ exports.addproduct = async (req, res, next) => {
         restaurantsId,
         file } = req.body;
       
+        
       if (!(ItemName && price && description &&restaurantsId&&file)) {
         return next(new Error("Fulfill all inputs"));
       }
@@ -120,6 +121,98 @@ exports.updateOrderStatus = async (req, res, next) => {
       const updatedOrder = await db.order.update({
           where: { id: parseInt(orderId) },
           data: { status },
+      });
+
+      res.json({ msg: "Order status updated successfully", updatedOrder });
+  } catch (err) {
+      next(err);
+  }
+};
+
+exports.updateShippingDetails = async (req, res, next) => {
+  try {
+    const { orderId, shippingCompany, trackingNumber,status } = req.body;
+
+    const updatedOrder = await db.order.update({
+      where: { id: parseInt(orderId) },
+      data: {
+        shippingCompany,
+        trackingNumber,
+        status
+      },
+    });
+
+    res.json({ msg: "Shipping details updated successfully", updatedOrder });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+
+exports.getUserme = async (req, res, next) => {
+  try {
+    const user = await db.user.findFirst({
+      where: { id: req.user.id }
+    })
+    res.json(user)
+  } catch (err) {
+    next(err)
+  }
+}
+
+
+exports.editProfile = async (req, res, next) => {
+  try {
+
+    const { name, lastname, phone, email } = req.body;
+
+
+    const updatedUser = await db.user.update({
+      where: {
+        id: req.user.id, 
+      },
+      data: {
+        name,
+        lastname,
+        phone,
+        email,
+      },
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+exports.updateStatusorder = async (req, res, next) => {
+  try {
+      const { orderId, status } = req.body;
+
+      const updatedOrder = await db.order.update({
+          where: { id: parseInt(orderId) },
+          data: { status },
+      });
+
+      res.json({ msg: "Order status updated successfully", updatedOrder });
+  } catch (err) {
+      next(err);
+  }
+};
+
+exports.cancelstore = async (req, res, next) => {
+  try {
+      const { orderId, status,cancelstore } = req.body;
+
+      const updatedOrder = await db.order.update({
+          where: { id: parseInt(orderId) },
+          data: { status,
+            cancelstore
+           },
       });
 
       res.json({ msg: "Order status updated successfully", updatedOrder });

@@ -53,16 +53,10 @@ enum Status {
   DONE
 }
 
-// model Orders {
-//   id            Int         @id @default(autoincrement())
-//   orderDate     DateTime
-//   TotalAmount   Float
-//   // user          User       @relation(fields: [UserId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   UserId        Int
-//   restaurants   Restaurants @relation(fields: [restaurantsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   restaurantsId Int
-//   OrderDate     OrderDate[]
-// }
+enum Category {
+  SOFTWARE
+  HARDWARE
+}
 
 model Product {
   id          Int         @id @default(autoincrement())
@@ -71,6 +65,7 @@ model Product {
   description String
   stock       Int
   file        String
+  category    Category  
   cart        Cart[]
   ordercart   Ordercart[]
 }
@@ -105,6 +100,10 @@ model Order {
   price_all Int
   status    String
   date      DateTime    @default(now())
+  shippingCompany  String     
+  trackingNumber   String   
+  cancel   String
+  cancelstore String 
   ordercart Ordercart[]
   Payment   Payment[]
 }
@@ -117,23 +116,6 @@ model Reviews {
   UserId  Int
 }
 
-// model Restaurants {
-//   id       Int      @id @default(autoincrement())
-//   password String?
-//   location String   @db.VarChar(100)
-//   Orders   Orders[]
-
-//   Reviews Reviews[]
-// }
-
-// model OrderDate {
-//   id        Int     @id @default(autoincrement())
-//   quantity  Int
-//   order     Orders  @relation(fields: [ordersId], references: [id])
-//   ordersId  Int
-//   Product   Product @relation(fields: [productId], references: [id])
-//   productId Int
-// }
 
 model Payment {
   id        Int     @id @default(autoincrement())
@@ -145,6 +127,7 @@ model Payment {
   address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   order Order @relation(fields: [orderId], references: [id])
   orderId   Int
+  slip      String?
 }
 
 model Address {

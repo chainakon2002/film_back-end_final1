@@ -2,7 +2,7 @@ const db = require("../models/db");
 
 exports.paymensave = async (req, res, next) =>{
     try{
-        const { status, userId, pay, addressId, orderId } = req.body
+        const { status, userId, pay, addressId, orderId , slip } = req.body
 
         const paymets = await db.payment.create({
             data: {
@@ -10,7 +10,8 @@ exports.paymensave = async (req, res, next) =>{
                 userId: parseInt(userId),
                 pay,
                 addressId: parseInt(addressId),
-                orderId: parseInt(orderId)
+                orderId: parseInt(orderId),
+                slip: slip || null 
             }
         })
         res.json({msg: "PaymentSave This Ok :", paymets})
@@ -42,3 +43,4 @@ exports.paymentshow = async (req, res, next) => {
 
     }
 }
+
