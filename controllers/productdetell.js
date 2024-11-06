@@ -130,6 +130,67 @@ exports.addUserAddress = async (req, res, next) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+exports.updateUserAddress = async (req, res, next) => {
+  try {
+      const { name, lastname, phone, province, district, tambon, housenumber, village, zipcode, other } = req.body;
+      const { addressId } = req.params;
+      
+      console.log('Received addressId:', addressId); // ตรวจสอบ addressId
+      console.log('Received data:', req.body); // ตรวจสอบข้อมูลที่รับ
+      
+      // ตรวจสอบความถูกต้องของข้อมูล
+      if (!addressId) {
+          return res.status(400).json({ error: "Address ID is required" });
+      }
+      if (!name || !lastname || !phone || !province || !district || !tambon || !housenumber || !village || !zipcode || !other) {
+          return res.status(400).json({ error: "All fields are required" });
+      }
+      if (!req.user || !req.user.id) {
+          return res.status(400).json({ error: "User ID is required" });
+      }
+      
+      const addressIdInt = parseInt(addressId, 10);
+      if (isNaN(addressIdInt)) {
+          return res.status(400).json({ error: "Invalid Address ID" });
+      }
+      
+      const zipcodeStr = zipcode.toString();
+
+      const updatedAddress = await prisma.address.update({
+          where: {
+              id: addressIdInt,
+          },
+          data: {
+              name,
+              lastname,
+              phone,
+              province,
+              district,
+              tambon,
+              housenumber,
+              village,
+              zipcode: zipcodeStr,
+              other,
+              userId: req.user.id,
+          },
+      });
+
+      console.log('Address updated:', updatedAddress);
+
+      res.status(200).json(updatedAddress);
+  } catch (error) {
+      console.error("Error updating address:", error);
+
+      if (error.code === 'P2025') {
+          return res.status(404).json({ error: "Address not found" });
+      }
+
+      res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
 
 
 

@@ -46,12 +46,13 @@ router.put('/updateprofile',authenticate,adminController.editProfile)
 
 
 
-
+router.put('/updateaddress/:addressId', authenticate, address.updateUserAddress);
 router.put('/updateorder',authenticate,adminController.updateStatusorder)
 router.put('/updateorderstatus', authenticate, adminController.updateOrderStatus);
 router.put('/updateproduct',authenticate,ProductController.updateProductDetails);
 router.put('/updateShipping',authenticate,adminController.updateShippingDetails);
-router.put('/cancel',authenticate,Cancel.canceluser)
+router.put('/cancel',authenticate,Cancel.canceluser);
+router.put('./cancelstore',authenticate,adminController.cancelstore);
 
-router.put('/products/:id', ProductController.updatestock)
+router.put('/products/:id', ProductController.updatestock);
 module.exports = router

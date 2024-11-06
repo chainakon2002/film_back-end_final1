@@ -4,7 +4,7 @@ const db = require("../models/db");
 
 exports.register = async (req, res, next) => {
   const { username, password, confirmPassword, email, address, name, lastname, phone } = req.body;
-
+  console.log('Received data:', { username, password, confirmPassword, email,name, lastname, phone });
   try {
     // Validation
     if (!(username && password && confirmPassword && name && lastname && phone)) {

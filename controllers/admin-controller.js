@@ -206,17 +206,24 @@ exports.updateStatusorder = async (req, res, next) => {
 
 exports.cancelstore = async (req, res, next) => {
   try {
-      const { orderId, status,cancelstore } = req.body;
+      const { orderId, status, cancelstore } = req.body;
 
+      // ตรวจสอบว่ามีข้อมูลครบถ้วน
+      if (!orderId || !status) {
+          return res.status(400).json({ msg: "Missing orderId or status" });
+      }
+
+      // อัพเดตข้อมูลคำสั่งซื้อในฐานข้อมูล
       const updatedOrder = await db.order.update({
-          where: { id: parseInt(orderId) },
-          data: { status,
-            cancelstore
-           },
+          where: { id: parseInt(orderId, 10) },
+          data: { status, cancelstore },
       });
 
-      res.json({ msg: "Order status updated successfully", updatedOrder });
+      // ส่งข้อมูลกลับพร้อมสถานะ HTTP 200
+      res.status(200).json({ msg: "Order status updated successfully", updatedOrder });
   } catch (err) {
+      // จัดการข้อผิดพลาด
+      console.error("Error updating order status:", err);
       next(err);
   }
 };

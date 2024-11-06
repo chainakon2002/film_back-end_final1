@@ -8,6 +8,7 @@ exports.createProduct = async (req, res, next) => {
     }
 
     const { ItemName, price, description, stock, category } = req.body;
+    console.log('Received data:',{ItemName, price, description, stock, category})
 
 
     if (!['SOFTWARE', 'HARDWARE'].includes(category)) {
